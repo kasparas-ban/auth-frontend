@@ -1,5 +1,6 @@
+import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 type LoginFormInputs = {
   email: string,
@@ -7,9 +8,22 @@ type LoginFormInputs = {
 };
 
 function LoginForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
-  const onSubmit: SubmitHandler<LoginFormInputs> = data => console.log(data);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const timeoutMsg = searchParams.get('timeout');
+  const userExistsMsg = searchParams.get('exists');
+  const activatedMsg = searchParams.get('activated');
 
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+
+  const onSubmit: SubmitHandler<LoginFormInputs> = data => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/auth/login',
+      data
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
 
   return (
     <div className="w-full max-w-xs mx-auto mt-8">
@@ -17,6 +31,24 @@ function LoginForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white shadow-md rounded px-8 pt-6 pb-2 mb-4"
       >
+        {timeoutMsg && (
+          <div className="text-center mb-4">
+            <div className="text-red-500 font-bold text-xl">Your link has expired.</div>
+            <div>Please try to register again.</div>
+          </div>
+        )}
+        {userExistsMsg && (
+          <div className="text-center mb-4">
+            <div className="font-bold text-red-500 text-xl">A user with your email address already exists</div>
+            <div>Please try to register with a different email address</div>
+          </div>
+        )}
+        {activatedMsg && (
+          <div className="text-center mb-4">
+            <div className="font-bold text-green-500 text-xl">Your account is now active!</div>
+            <div>Go ahead and login</div>
+          </div>
+        )}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

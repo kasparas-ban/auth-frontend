@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
 
@@ -10,7 +11,20 @@ type FormInputs = {
 
 function RegisterForm() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>();
-  const onSubmit: SubmitHandler<FormInputs> = data => console.log(data);
+  const onSubmit: SubmitHandler<FormInputs> = data => {
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/auth/register',
+      data: {
+        name: data.username,
+        email: data.email,
+        password: data.pass,
+        password2: data.pass2
+      }
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  };
 
   return (
     <div className="w-full max-w-md mx-auto mt-8">

@@ -14,7 +14,8 @@ function RegisterForm() {
   const onSubmit: SubmitHandler<FormInputs> = data => {
     axios({
       method: 'post',
-      url: 'http://localhost:8000/auth/register',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      url: 'http://localhost:3001/api/register',
       data: {
         name: data.username,
         email: data.email,
@@ -136,12 +137,12 @@ function RegisterForm() {
             )}
           </div>
         </div>
-        <div>
+        <div className="mt-6">
           <button
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:ring focus:border-blue-500"
           >
-            Register
+            Sign Up
           </button>
           <div className="block text-center py-3">
             <Link to="/login" className="font-bold text-blue-500 hover:text-blue-800">

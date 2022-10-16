@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 type LoginFormInputs = {
   email: string,
-  pass: string,
+  password: string,
 };
 
 function LoginForm() {
@@ -18,7 +18,8 @@ function LoginForm() {
   const onSubmit: SubmitHandler<LoginFormInputs> = data => {
     axios({
       method: 'post',
-      url: 'http://localhost:8000/auth/login',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      url: 'http://localhost:3001/api/login',
       data
     })
       .then(response => console.log(response))
@@ -86,13 +87,13 @@ function LoginForm() {
           </div>
           <input
             type="password"
-            className={`shadow appearance-none border ${errors.pass ? "border-red-500 focus:ring-red-200 " : "focus:border-blue-500 "
+            className={`shadow appearance-none border ${errors.password ? "border-red-500 focus:ring-red-200 " : "focus:border-blue-500 "
               }rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring`}
             id="password"
             placeholder="******************"
-            {...register("pass", { required: true })}
+            {...register("password", { required: true })}
           />
-          {errors.pass && (
+          {errors.password && (
             <p className="text-red-500 text-xs italic">
               Please enter your password
             </p>
@@ -103,11 +104,11 @@ function LoginForm() {
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:ring focus:border-blue-500"
           >
-            Sign In
+            Log in
           </button>
           <div className="block text-center py-3">
             <Link to="/register" className="font-bold text-blue-500 hover:text-blue-800">
-              Register
+              Create New Account
             </Link>
           </div>
         </div>

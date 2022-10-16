@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import RegisterForm from './Forms/RegisterForm';
-import LoginForm from './Forms/LoginForm';
-import ResetForm from './Forms/ResetForm';
-import ResetConfirmation from './Forms/ResetConfirmation';
+import RegisterForm from './Pages/RegisterForm';
+import LoginForm from './Pages/LoginForm';
+import ResetForm from './Pages/ResetForm';
+import ResetConfirmation from './Pages/ResetConfirmation';
+import Home from './Pages/Home';
 import './index.css';
 
 const root = ReactDOM.createRoot(
@@ -17,6 +18,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/reset" element={<ResetForm />}>
@@ -32,7 +34,7 @@ root.render(
           />
         </Route>
       </Routes>
-    </BrowserRouter>,
+    </BrowserRouter>
   </React.StrictMode>
 );
 

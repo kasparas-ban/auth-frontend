@@ -13,6 +13,7 @@ function LoginForm() {
   const userExistsMsg = searchParams.get('exists');
   const activatedMsg = searchParams.get('activated');
 
+
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = data => {
@@ -22,7 +23,7 @@ function LoginForm() {
       url: 'http://localhost:3001/api/login',
       data
     })
-      .then(response => console.log(response))
+      .then(res => window.location.href = "http://localhost:3001/")
       .catch(error => console.log(error));
   };
 

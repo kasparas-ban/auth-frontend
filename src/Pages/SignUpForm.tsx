@@ -15,19 +15,19 @@ type FormInputs = {
 function SignUpForm() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>();
   const onSubmit: SubmitHandler<FormInputs> = data => {
-    // axios({
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    //   url: 'http://localhost:3001/api/register',
-    //   data: {
-    //     name: data.username,
-    //     email: data.email,
-    //     password: data.pass,
-    //     password2: data.pass2
-    //   }
-    // })
-    //   .then(response => console.log(response))
-    //   .catch(error => console.log(error));
+    axios({
+      method: 'post',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      url: 'http://localhost:3001/api/register',
+      data: {
+        name: data.username,
+        email: data.email,
+        password: data.pass,
+        password2: data.pass2
+      }
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
   };
 
   return (

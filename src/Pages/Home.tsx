@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
 import './Home.scss';
 
 type LoginFormInputs = {
@@ -46,14 +47,14 @@ function LoginForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = data => {
-    // axios({
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    //   url: 'http://localhost:3001/api/login',
-    //   data
-    // })
-    //   .then(res => window.location.href = "http://localhost:3001/")
-    //   .catch(error => console.log(error));
+    axios({
+      method: 'post',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      url: 'http://localhost:3001/api/login',
+      data
+    })
+      .then(res => window.location.href = "http://localhost:3001/")
+      .catch(error => console.log(error));
   };
 
   return (

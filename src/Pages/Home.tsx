@@ -1,22 +1,124 @@
-import { Link } from "react-router-dom";
-import { ReactComponent as CompanyLogo } from '../Assets/CompanyLogo.svg';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Link, useSearchParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import './Home.scss';
+
+type LoginFormInputs = {
+  email: string,
+  password: string,
+};
 
 function Home() {
   return (
-    <div className="w-full max-w-md mx-auto mt-8">
-      <CompanyLogo className="h-16 mb-8" />
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-2">
-        <div className="text-center text-5xl mb-8">Welcome</div>
-        <Link to="/login" className="block text-center w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:ring focus:border-blue-500">
-          Log in
-        </Link>
-        <div className="text-center py-3">
-          <Link to="/register" className="font-bold text-blue-500 hover:text-blue-800">
-            Create New Account
+    <motion.div
+      key="login-page"
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -100 }}
+      transition={{ ease: "easeOut", duration: 0.15 }}
+    >
+      <div className="main-content">
+        <div className="center-strip">
+          <div className="logo-panel">
+            <CompanyLogo />
+          </div>
+          <div className="login-panel">
+            <LoginForm />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function CompanyLogo() {
+  return (
+    <div className="logo">blue.dot</div>
+  );
+}
+
+function LoginForm() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const timeoutMsg = searchParams.get('timeout');
+  const userExistsMsg = searchParams.get('exists');
+  const activatedMsg = searchParams.get('activated');
+
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+
+  const onSubmit: SubmitHandler<LoginFormInputs> = data => {
+    // axios({
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    //   url: 'http://localhost:3001/api/login',
+    //   data
+    // })
+    //   .then(res => window.location.href = "http://localhost:3001/")
+    //   .catch(error => console.log(error));
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="login-form"
+    >
+      {timeoutMsg && (
+        <div className="info-message">
+          <div className="info-message-text">Your link has expired</div>
+          <div>Please try to register again</div>
+        </div>
+      )}
+      {userExistsMsg && (
+        <div className="info-message">
+          <div className="info-message-text">A user with your email address already exists</div>
+          <div>Please login or try to register with a different email address</div>
+        </div>
+      )}
+      {activatedMsg && (
+        <div className="info-message activated-text">
+          <div className="info-message-text">Your account is now active!</div>
+          <div>Go ahead and login</div>
+        </div>
+      )}
+      <div className={`input-field ${errors.email ? 'input-error' : ''}`}>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          {...register("email", { required: true })}
+        />
+        {errors.email && (
+          <p className="error-text">
+            Enter your email
+          </p>
+        )}
+      </div>
+      <div className={`input-field ${errors.password ? 'input-error' : ''}`}>
+        <input
+          type="password"
+          placeholder="Password"
+          {...register("password", { required: true })}
+        />
+        <div className="password-error-section">
+          {errors.password && (
+            <p className="error-text">
+              Enter your password
+            </p>
+          )}
+          <Link to="/reset" className="forgot-password-link">
+            Forgot Password?
           </Link>
         </div>
       </div>
-    </div>
+      <button
+        type="submit"
+        className="submit-button"
+      >
+        Log in
+      </button>
+      <Link to="/signup" className="create-account-link">
+        Create New Account
+      </Link>
+    </form>
   );
 }
 

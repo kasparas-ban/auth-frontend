@@ -1,0 +1,56 @@
+@import 'variables';
+
+// === Main Content ===
+
+.signup-main {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+
+  .signup-form {
+    background-color:white;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border-radius: 0.375rem;
+    padding: 1.5rem;
+    width: 18rem;
+  }
+}
+
+.signup-text {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-weight: bold;
+  color: $slate-700;
+}
+
+// === Form Inputs ===
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-error {
+  input {
+    border-color: $error !important;
+
+    &::placeholder {
+      color: $rose-300 !important;
+    }
+
+    &:focus {
+      outline: 0.2rem solid $rose-300 !important;
+    }
+  }
+}
+
+// === Buttons and Links ===
+
+.signup-button {
+  margin: 1rem 0 0.6rem 0;
+}

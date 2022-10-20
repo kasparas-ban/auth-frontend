@@ -1,13 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import RegisterForm from './Pages/RegisterForm';
-import LoginForm from './Pages/LoginForm';
-import ResetForm from './Pages/ResetForm';
-import ResetConfirmation from './Pages/ResetConfirmation';
-import Home from './Pages/Home';
 import './index.css';
 
 const root = ReactDOM.createRoot(
@@ -16,24 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/reset" element={<ResetForm />}>
-          </Route>
-          <Route path="/reset-confirmation" element={<ResetConfirmation />} />
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: '1rem' }}>
-                <p>There's nothing here!</p>
-              </main>
-            }
-          />
-        </Route>
-      </Routes>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

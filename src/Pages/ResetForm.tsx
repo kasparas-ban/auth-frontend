@@ -9,7 +9,7 @@ type ResetFormInputs = {
 };
 
 function ResetForm() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<ResetFormInputs>();
   const onSubmit: SubmitHandler<ResetFormInputs> = data => {
     navigate('/reset-confirmation', { replace: true, state: data.email });
@@ -17,7 +17,7 @@ function ResetForm() {
 
   return (
     <motion.div
-      key="signup-page"
+      key="reset-page"
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}

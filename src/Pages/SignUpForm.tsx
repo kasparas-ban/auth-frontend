@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ReactComponent as LeftArrow } from '../Assets/arrow-left-solid.svg';
-import { Link } from "react-router-dom";
+import { ReactComponent as VisibilityIcon } from '../Assets/eye-regular.svg';
+import { Link, useNavigate } from "react-router-dom";
 import './SignUpForm.scss';
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 type FormInputs = {
   username: string,
@@ -13,6 +15,8 @@ type FormInputs = {
 };
 
 function SignUpForm() {
+  const [isPassVisible, setIsPassVisible] = useState(false);
+  const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>();
   const onSubmit: SubmitHandler<FormInputs> = data => {
     axios({
@@ -20,14 +24,55 @@ function SignUpForm() {
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       url: 'http://localhost:3001/api/register',
       data: {
-        name: data.username,
+        username: data.username,
         email: data.email,
         password: data.pass,
         password2: data.pass2
       }
     })
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
+      .then(response => response.status === 200 ? navigate('/?activate=true') : navigate('/?signupError=true'))
+      .catch(err => navigate('/?signupError=true'));
+  };
+
+  const usernameErrorMsg = (type: string) => {
+    switch (type) {
+      case 'required':
+        return 'Username is required';
+      case 'minLength':
+        return 'Username is too short';
+      case 'maxLength':
+        return 'Username is too long';
+      case 'pattern':
+        return 'Only letter characters are allowed';
+      default:
+        return '';
+    }
+  };
+
+  const emailErrorMsg = (type: string) => {
+    switch (type) {
+      case 'required':
+        return 'Email is required';
+      case 'maxLength':
+        return 'Email is too long';
+      default:
+        return '';
+    }
+  };
+
+  const passwordErrorMsg = (type: string) => {
+    switch (type) {
+      case 'required':
+        return 'Password is required';
+      case 'minLength':
+        return 'Password is too short';
+      case 'maxLength':
+        return 'Password is too long';
+      case 'pattern':
+        return 'Password must contain at least one lowercase letter, uppercase letter, a digit, and a special character: @$!%*#?&^_-';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -50,11 +95,19 @@ function SignUpForm() {
                 id="username"
                 type="text"
                 placeholder="Username"
-                {...register("username", { required: true })}
+                {...register(
+                  "username",
+                  {
+                    required: true,
+                    minLength: 6,
+                    maxLength: 20,
+                    pattern: /^[\p{L}-]+$/ug // Need to allow any unicode character
+                  })
+                }
               />
               {errors.username && (
                 <p className="error-text">
-                  Please enter your username
+                  {usernameErrorMsg(errors.username.type)}
                 </p>
               )}
             </div>
@@ -65,11 +118,17 @@ function SignUpForm() {
                 id="email"
                 type="email"
                 placeholder="Email"
-                {...register("email", { required: true })}
+                {...register(
+                  "email",
+                  {
+                    required: true,
+                    maxLength: 40
+                  }
+                )}
               />
               {errors.email && (
                 <p className="error-text">
-                  Please enter your email
+                  {emailErrorMsg(errors.email.type)}
                 </p>
               )}
             </div>
@@ -78,13 +137,22 @@ function SignUpForm() {
             <div className={`input-field ${errors.pass ? 'input-error' : ''}`}>
               <input
                 id="password"
-                type="password"
-                placeholder="Password"
-                {...register("pass", { required: true })}
+                type={isPassVisible ? 'text' : 'password'}
+                placeholder='Password'
+                {...register(
+                  "pass",
+                  {
+                    required: true,
+                    minLength: 10,
+                    maxLength: 30,
+                    pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^_-])[A-Za-z\d@$!%*#?&^_-]*$/ // Allowed special chars: @$!%*#?&^_- 
+                  }
+                )}
               />
+              <VisibilityIcon className={`visibility-icon ${isPassVisible ? 'pass-visible' : ''}`} onClick={() => setIsPassVisible(!isPassVisible)} />
               {errors.pass && (
                 <p className="error-text">
-                  Please enter your password
+                  {passwordErrorMsg(errors.pass?.type)}
                 </p>
               )}
             </div>

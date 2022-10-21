@@ -89,3 +89,22 @@ $slate-800: #1E293B;
   margin-right: 0.4rem;
   fill: $blue-700;
 }
+
+.visibility-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+
+  position: absolute;
+  transform: translate(-2.2rem, 0.65rem);
+
+  fill: $slate-300;
+
+  &:hover {
+    fill: $slate-600;
+    cursor: pointer;
+  }
+}
+
+.pass-visible {
+  fill: $slate-700;
+}

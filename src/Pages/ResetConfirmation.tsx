@@ -1,27 +1,46 @@
-import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ReactComponent as LeftArrow } from '../Assets/arrow-left-solid.svg';
+import './ResetConfirmation.scss';
 
 function ResetConfirmation() {
   const { state } = useLocation();
+  const navigate = useNavigate();
 
-  return (
-    <div className="w-full max-w-md mx-auto mt-8">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-4">
-        <div className="text-gray-600 text-center mb-3">
-          A password reset link was sent to the email addess
+  useEffect(() => {
+    if (!state) navigate('/');
+  }, []);
+
+  return (state ?
+    <motion.div
+      key="resetC-page"
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+      transition={{ ease: "easeOut", duration: 0.15 }}
+    >
+      <div className="resetC-page">
+        <div className="resetC-panel">
+          <div className="resetC-main-text">
+            A password reset link was sent to
+          </div>
+          <div className="resetC-email">
+            {state as string}
+          </div>
+          <div className="resetC-text">
+            Follow the instructions in the email to recover your password.
+          </div>
         </div>
-        <div className="font-bold text-xl text-center text-gray-600 mb-3">
-          {state as string}
-        </div>
-        <div className="text-center text-gray-600 mb-3">
-          Check the email for further instructions.
-        </div>
-        <div className="text-center">
-          <Link to="/login" className="font-bold text-gray-500 hover:text-gray-600">
-            Back to Login
+        <div className="back-link">
+          <Link to="/" className="back-link-text">
+            <span><LeftArrow className="left-arrow" /></span>
+            Back to login
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
+    : <></>
   );
 }
 

@@ -1,9 +1,10 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Home from './Pages/Home';
-import ResetForm from './Pages/ResetForm';
-import SignUpForm from './Pages/SignUpForm';
-import ResetConfirmation from './Pages/ResetConfirmation';
+import Home from './Pages/Home/Home';
+import ResetReqForm from './Pages/ResetPassword/ResetReqForm';
+import SignUpForm from './Pages/SignUp/SignUpForm';
+import ResetConfirmation from './Pages/ResetPassword/ResetConfirmation';
+import ResetPassForm from './Pages/ResetPassword/ResetPassForm';
 import ErrorPage from './Pages/ErrorPage';
 import NotFoundPage from './Pages/NotFoundPage';
 import './App.css';
@@ -17,8 +18,9 @@ function App() {
         <Route errorElement={<ErrorPage />}>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUpForm />} />
-          <Route path="/reset" element={<ResetForm />} />
+          <Route path="/reset-request" element={<ResetReqForm />} />
           <Route path="/reset-confirmation" element={<ResetConfirmation />} />
+          <Route path="/reset-form/:token" element={<ResetPassForm />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes >

@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { ReactComponent as VisibilityIcon } from '../Assets/eye-regular.svg';
+import { ReactComponent as VisibilityIcon } from '../../Assets/eye-regular.svg';
 import './Home.scss';
 
 type LoginFormInputs = {
@@ -62,6 +62,7 @@ function LoginForm(props: { setShakePanel: React.Dispatch<React.SetStateAction<b
   const activateMsg = searchParams.get('activate');
   const signupErrorMsg = searchParams.get('signupError');
   const loginErrorMsg = searchParams.get('loginError');
+  const resetMsg = searchParams.get('resetSuccess');
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
@@ -121,6 +122,17 @@ function LoginForm(props: { setShakePanel: React.Dispatch<React.SetStateAction<b
           <div>Check your login details and try again</div>
         </div>
       )}
+      {resetMsg && (resetMsg === 'true' ? (
+        <div className="info-message activated-text">
+          <div className="info-message-text">Password Reset</div>
+          <div>Use your new password to login</div>
+        </div>
+      ) : (
+        <div className="info-message">
+          <div className="info-message-text">Password reset failed</div>
+          <div>Try to reset your password later</div>
+        </div>
+      ))}
       <div className={`input-field ${errors.email ? 'input-error' : ''}`}>
         <input
           type="email"
@@ -147,7 +159,7 @@ function LoginForm(props: { setShakePanel: React.Dispatch<React.SetStateAction<b
               Enter your password
             </p>
           )}
-          <Link to="/reset" className="forgot-password-link">
+          <Link to="reset-request" className="forgot-password-link">
             Forgot Password?
           </Link>
         </div>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ReactComponent as LeftArrow } from '../Assets/arrow-left-solid.svg';
+import { ReactComponent as LeftArrow } from '../../Assets/arrow-left-solid.svg';
 import './ResetConfirmation.scss';
 
 function ResetConfirmation() {

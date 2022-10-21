@@ -1,63 +1,36 @@
-import axios from "axios";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { ReactComponent as LeftArrow } from '../Assets/arrow-left-solid.svg';
-import { ReactComponent as VisibilityIcon } from '../Assets/eye-regular.svg';
-import { Link, useNavigate } from "react-router-dom";
-import './SignUpForm.scss';
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { motion } from "framer-motion";
+import axios from "axios";
+import { ReactComponent as LeftArrow } from '../../Assets/arrow-left-solid.svg';
+import { ReactComponent as VisibilityIcon } from '../../Assets/eye-regular.svg';
+import './ResetPassForm.scss';
 
-type FormInputs = {
-  username: string,
-  email: string,
+type ResetFormInputs = {
   pass: string,
   pass2: string,
 };
 
-function SignUpForm() {
+function ResetPassForm() {
   const [isPassVisible, setIsPassVisible] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormInputs>();
-  const onSubmit: SubmitHandler<FormInputs> = data => {
+  const params = useParams();
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<ResetFormInputs>();
+  const onSubmit: SubmitHandler<ResetFormInputs> = data => {
     axios({
       method: 'post',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      url: 'http://localhost:3001/api/register',
+      url: 'http://localhost:3001/api/complete-reset',
       data: {
-        username: data.username,
-        email: data.email,
         password: data.pass,
-        password2: data.pass2
+        password2: data.pass2,
+        token: params.token
       }
     })
-      .then(response => response.status === 200 ? navigate('/?activate=true') : navigate('/?signupError=true'))
-      .catch(err => navigate('/?signupError=true'));
-  };
-
-  const usernameErrorMsg = (type: string) => {
-    switch (type) {
-      case 'required':
-        return 'Username is required';
-      case 'minLength':
-        return 'Username is too short';
-      case 'maxLength':
-        return 'Username is too long';
-      case 'pattern':
-        return 'Only letter characters are allowed';
-      default:
-        return '';
-    }
-  };
-
-  const emailErrorMsg = (type: string) => {
-    switch (type) {
-      case 'required':
-        return 'Email is required';
-      case 'maxLength':
-        return 'Email is too long';
-      default:
-        return '';
-    }
+      .then(response => response.status === 200 ? navigate('/?resetSuccess=true') : navigate('/?resetSuccess=false'))
+      .catch(err => navigate('/not-found'));
   };
 
   const passwordErrorMsg = (type: string) => {
@@ -77,68 +50,25 @@ function SignUpForm() {
 
   return (
     <motion.div
-      key="signup-page"
+      key="pass-reset-page"
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 100 }}
       transition={{ ease: "easeOut", duration: 0.15 }}
     >
       <div className="signup-main">
-        <div className="signup-text">Sign Up</div>
+        <div className="signup-text">Password Reset</div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="signup-form"
         >
-          <div className="form-input">
-            <div className={`input-field ${errors.username ? 'input-error' : ''}`}>
-              <input
-                id="username"
-                type="text"
-                placeholder="Username"
-                {...register(
-                  "username",
-                  {
-                    required: true,
-                    minLength: 6,
-                    maxLength: 20,
-                    pattern: /^[\p{L}-]+$/ug // Need to allow any unicode character
-                  })
-                }
-              />
-              {errors.username && (
-                <p className="error-text">
-                  {usernameErrorMsg(errors.username.type)}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="form-input">
-            <div className={`input-field ${errors.email ? 'input-error' : ''}`}>
-              <input
-                id="email"
-                type="email"
-                placeholder="Email"
-                {...register(
-                  "email",
-                  {
-                    required: true,
-                    maxLength: 40
-                  }
-                )}
-              />
-              {errors.email && (
-                <p className="error-text">
-                  {emailErrorMsg(errors.email.type)}
-                </p>
-              )}
-            </div>
-          </div>
+          <div className="reset-instr">Choose a new password</div>
           <div className="form-input">
             <div className={`input-field ${errors.pass ? 'input-error' : ''}`}>
               <input
                 id="password"
                 type={isPassVisible ? 'text' : 'password'}
-                placeholder='Password'
+                placeholder='New password'
                 {...register(
                   "pass",
                   {
@@ -182,7 +112,7 @@ function SignUpForm() {
             type="submit"
             className="submit-button signup-button"
           >
-            Sign Up
+            Reset Password
           </button>
         </form>
         <div className="back-link">
@@ -196,4 +126,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export default ResetPassForm;

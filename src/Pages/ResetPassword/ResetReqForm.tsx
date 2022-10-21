@@ -1,18 +1,28 @@
+import axios from "axios";
 import { motion } from "framer-motion";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { ReactComponent as LeftArrow } from '../Assets/arrow-left-solid.svg';
-import './ResetForm.scss';
+import { ReactComponent as LeftArrow } from '../../Assets/arrow-left-solid.svg';
+import './ResetReqForm.scss';
 
 type ResetFormInputs = {
   email: string
 };
 
-function ResetForm() {
+function ResetReqForm() {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<ResetFormInputs>();
   const onSubmit: SubmitHandler<ResetFormInputs> = data => {
-    navigate('/reset-confirmation', { replace: true, state: data.email });
+    axios({
+      method: 'post',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      url: 'http://localhost:3001/api/init-reset',
+      data: {
+        email: data.email
+      }
+    })
+      .then(() => navigate('/reset-confirmation', { replace: true, state: data.email }))
+      .catch(() => navigate('/not-found'));
   };
 
   return (
@@ -39,7 +49,7 @@ function ResetForm() {
             />
             {errors.email && (
               <p className="error-text">
-                Please enter your email
+                Enter your email
               </p>
             )}
           </div>
@@ -63,4 +73,4 @@ function ResetForm() {
   );
 }
 
-export default ResetForm;
+export default ResetReqForm;
